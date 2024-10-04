@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const Point = require('../../Point');
 const User = require('../../User');
 

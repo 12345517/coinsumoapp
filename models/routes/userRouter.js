@@ -113,4 +113,6 @@ userRouter.get("/:id/referrals", authMiddleware, async (req, res) => {
   }
 });
 
-module.exports = userRouter; // No olvides exportar el route
+// Exportar el router
+module.exports = userRouter;
+ 
