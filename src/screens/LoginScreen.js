@@ -9,7 +9,7 @@ const LoginScreen = ({ navigation }) => {
 
   const login = async () => {
     try {
-      const response = await axios.post('http://tu-api.com/users/login', { email, password });
+      const response = await axios.post('http://coinsumo.co/users/login', { email, password });
       await AsyncStorage.setItem('token', response.data.token);
       navigation.navigate('Home'); // Redirigir a la pantalla principal
     } catch (error) {
