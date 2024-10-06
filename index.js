@@ -27,7 +27,7 @@ const collaboratorRouter = require('./models/routes/collaborators');
 const crmRouter = require('./models/routes/crm');
 
 const app = express(); // Define la aplicación Express
-const PORT = process.env.PORT || ":3001"; // Cambia ":3000" a 3001
+const PORT = process.env.PORT || 3001; // Cambia ":3000" a 3001
 
 // Configuración de CORS
 app.use(cors({
@@ -69,3 +69,6 @@ app.use('/wholesalers', wholesalerRouter); // Mayoristas no usan el middleware
 app.use('/entrepreneurs', entrepreneurRouter); // Empresarios no usan el middleware
 app.use('/collaborators', authMiddleware, collaboratorRouter);
 app.use('/crm', authMiddleware, crmRouter);
+app.listen(PORT, () => {
+    console.log('Servidor corriendo en http://localhost:${PORT}');
+  });
