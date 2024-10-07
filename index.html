@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coinsumo</title>
     <link rel="stylesheet" href="styles.css"> <!-- Tu hoja de estilos -->
+    <script src="script.js" defer></script> <!-- Archivo JavaScript cargado al final -->
 </head>
 <body>
     <header>
@@ -14,6 +15,7 @@
                 <li><a href="#productos">Productos</a></li>
                 <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
                 <li><a href="#contacto">Contacto</a></li>
+                <li><a href="https://coinsumo.co">Ir a Coinsumo</a></li> <!-- Enlace a Coinsumo -->
             </ul>
         </nav>
     </header>
@@ -21,22 +23,47 @@
     <main>
         <section id="productos">
             <h2>Productos Destacados</h2>
-            <!-- Aquí añadirás productos -->
+            <div class="productos-lista">
+                <div class="producto">
+                    <h3>Producto 1</h3>
+                    <p>Descripción breve del producto.</p>
+                    <button>Añadir al carrito</button>
+                </div>
+                <div class="producto">
+                    <h3>Producto 2</h3>
+                    <p>Descripción breve del producto.</p>
+                    <button>Añadir al carrito</button>
+                </div>
+            </div>
         </section>
         
         <section id="sobre-nosotros">
             <h2>Sobre Nosotros</h2>
-            <p>Descripción sobre Coinsumo...</p>
+            <p>Descripción sobre Coinsumo, nuestra misión y visión.</p>
         </section>
         
         <section id="contacto">
-            <h2>Contacto</h2>
-            <form>
+            <h2>Registro para Afiliados</h2>
+            <form id="registrationForm">
+                <label for="userId">ID de Usuario:</label>
+                <input type="text" id="userId" name="userId" required>
+
                 <label for="name">Nombre:</label>
                 <input type="text" id="name" name="name" required>
+                
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
-                <button type="submit">Enviar</button>
+                
+                <label for="tipo_usuario">Tipo de Usuario:</label>
+                <select id="tipo_usuario" name="tipo_usuario" required>
+                    <option value="empresario">Empresario</option>
+                    <option value="mayorista">Mayorista</option>
+                </select>
+
+                <label for="porcentaje">Porcentaje para Coinsumo:</label>
+                <input type="number" id="porcentaje" name="porcentaje" step="0.01" placeholder="%">
+
+                <button type="submit">Registrar</button>
             </form>
         </section>
     </main>
@@ -44,7 +71,7 @@
     <footer>
         <p>&copy; 2024 Coinsumo. Todos los derechos reservados.</p>
     </footer>
-    
-    <script src="script.js"></script> <!-- Tu archivo JavaScript -->
 </body>
 </html>
+ 
+ 
