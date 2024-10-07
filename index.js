@@ -33,7 +33,7 @@ const PORT = process.env.PORT || 3001; // Cambia ":3000" a 3001
 app.use(cors({
     origin: [
         'http://localhost:3001',
-        'https://tu-app.com',
+        'https://coinsumo.co',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
