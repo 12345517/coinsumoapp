@@ -4,48 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coinsumo</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Tu hoja de estilos -->
-    <script src="script.js" defer></script> <!-- Archivo JavaScript cargado al final -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <header>
         <h1>Bienvenido a Coinsumo</h1>
         <nav>
             <ul>
-                <li><a href="#productos">Productos</a></li>
-                <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-                <li><a href="https://coinsumo.co">Ir a Coinsumo</a></li> <!-- Enlace a Coinsumo -->
+                <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                <li><a href="#registro">Registro</a></li>
+                <li><a href="#ventajas">Ventajas</a></li>
+                <li><a href="https://coinsumo.co">Ir a Coinsumo</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section id="productos">
-            <h2>Productos Destacados</h2>
-            <div class="productos-lista">
-                <div class="producto">
-                    <h3>Producto 1</h3>
-                    <p>Descripción breve del producto.</p>
-                    <button>Añadir al carrito</button>
-                </div>
-                <div class="producto">
-                    <h3>Producto 2</h3>
-                    <p>Descripción breve del producto.</p>
-                    <button>Añadir al carrito</button>
-                </div>
-            </div>
+        <section id="quienes-somos">
+            <h2>Quiénes Somos</h2>
+            <p>Descripción de Coinsumo y lo que ofrecemos...</p>
         </section>
-        
-        <section id="sobre-nosotros">
-            <h2>Sobre Nosotros</h2>
-            <p>Descripción sobre Coinsumo, nuestra misión y visión.</p>
-        </section>
-        
-        <section id="contacto">
-            <h2>Registro para Afiliados</h2>
+
+        <section id="registro">
+            <h2>Registro</h2>
             <form id="registrationForm">
-                <label for="userId">ID de Usuario:</label>
+                <label for="userId">Cédula de Ciudadanía:</label>
                 <input type="text" id="userId" name="userId" required>
 
                 <label for="name">Nombre:</label>
@@ -58,21 +42,53 @@
                 <input type="text" id="whatsapp" name="whatsapp" required>
 
                 <label for="tipo_usuario">Tipo de Usuario:</label>
-                <select id="tipo_usuario" name="tipo_usuario" required>
+                <select id="tipo_usuario" name="tipo_usuario" required onchange="mostrarCasillaEmpresario()">
+                    <option value="usuario">Usuario</option>
                     <option value="empresario">Empresario</option>
                     <option value="mayorista">Mayorista</option>
                 </select>
 
-                <label for="porcentaje">Porcentaje para Coinsumo:</label>
-                <input type="number" id="porcentaje" name="porcentaje" step="0.01" placeholder="%">
+                <div id="casillaEmpresario" style="display: none;">
+                    <label for="porcentaje">Porcentaje para Coinsumo:</label>
+                    <input type="number" id="porcentaje" name="porcentaje" step="0.01" placeholder="%" required>
+                </div>
+
+                <input type="checkbox" id="acceptTerms" name="acceptTerms" required>
+                <label for="acceptTerms">Acepto los <a href="#terms">términos y condiciones</a></label>
 
                 <button type="submit">Registrar</button>
             </form>
+
+            <section id="terms">
+                <h3>Términos y Condiciones</h3>
+                <p>Texto de los términos y condiciones...</p>
+            </section>
+        </section>
+
+        <section id="ventajas">
+            <h2>Ventajas de ser parte de Coinsumo</h2>
+            <ul>
+                <li>Gana puntos por recomendar y comprar.</li>
+                <li>Accede a productos exclusivos.</li>
+                <li>Utiliza nuestra billetera digital.</li>
+            </ul>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Coinsumo. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Coinsumo. Todos los derechos reservados. | <a href="#contacto">Contáctanos</a></p>
     </footer>
+
+    <script>
+        function mostrarCasillaEmpresario() {
+            const tipoUsuario = document.getElementById('tipo_usuario').value;
+            const casillaEmpresario = document.getElementById('casillaEmpresario');
+            if (tipoUsuario === 'empresario') {
+                casillaEmpresario.style.display = 'block';
+            } else {
+                casillaEmpresario.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
