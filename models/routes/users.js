@@ -19,9 +19,34 @@ userRouter.get("/", authMiddleware, async (req, res) => {
 });
 
 // Ruta para crear un nuevo usuario
-userRouter.post("/", async (req, res) => {
-  const { idNumber, name, email, password, sponsorId } = req.body; // Incluye idNumber
+userRouter.post('/registro', async (req, res) => {
+  try {
+      const { userId, name, email, whatsapp, pais, departamento, ciudad, direccion, tipo_usuario, porcentaje } = req.body;
 
+      const newUser = new User({
+          idNumber: userId,
+          name,
+          email,
+          whatsapp,
+          pais,
+          departamento,
+          ciudad,
+          direccion,
+          entrepreneur: tipo_usuario === 'empresario', 
+          wholesale: tipo_usuario === 'mayorista',
+          percentage: porcentaje,
+      });
+
+      const salt = await bcrypt.genSalt(10);
+      newUser.password = await bcrypt.hash(req.body.password, salt); // Asegúrate de que tienes una contraseña en tu formulario.
+
+      await newUser.save(); // Guarda el nuevo usuario
+      res.status(201).json({ success: true, message: "Registro exitoso" });
+  } catch (error) {
+      console.error(error);
+      res.status(400).json({ success: false, message: error.message });
+  }
+});
   // Validaciones
   if (!idNumber || !name || !email || !password) {
     return res.status(400).json({ message: "Todos los campos son obligatorios" });
@@ -78,7 +103,6 @@ userRouter.post("/", async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
-});
 
 // Ruta para obtener un usuario por ID (solo para usuarios autenticados)
 userRouter.get("/:id", authMiddleware, getUser, (req, res) => {

@@ -5,7 +5,11 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  whatsapp: { type: String }, // Añadir campo WhatsApp
+  whatsapp: { type: String },
+  pais: { type: String, required: true }, // Nuevo campo para país
+  departamento: { type: String, required: true }, // Nuevo campo para departamento
+  ciudad: { type: String, required: true }, // Nuevo campo para ciudad
+  direccion: { type: String, required: true }, // Nuevo campo para dirección
   sponsorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   front: { type: Number, default: 0 },
   level: { type: Number, default: 1 },
@@ -13,14 +17,14 @@ const userSchema = new mongoose.Schema({
   points: { type: Number, default: 0 },
   wallet: { type: mongoose.Schema.Types.ObjectId, ref: 'Wallet' },
   paymentMethods: {
-    cash: { type: Boolean, default: true }, // Permitir pago en efectivo
-    qrCode: { type: Boolean, default: true } // Permitir pago por QR
+    cash: { type: Boolean, default: true },
+    qrCode: { type: Boolean, default: true }
   },
-  membershipStatus: { type: String, default: 'inactive' }, // Estado de membresía
+  membershipStatus: { type: String, default: 'inactive' },
   membershipExpiryDate: { type: Date },
-  entrepreneur: { type: Boolean, default: false },  // Indica si es un empresario
-  wholesale: { type: Boolean, default: false }, // Indica si es un mayorista
-  collaborator: { type: Boolean, default: false } // Indica si es un colaborador
+  entrepreneur: { type: Boolean, default: false },
+  wholesale: { type: Boolean, default: false },
+  collaborator: { type: Boolean, default: false }
 });
 
 const User = mongoose.model('User', userSchema);

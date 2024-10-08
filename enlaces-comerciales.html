@@ -3,31 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coinsumo</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Tu hoja de estilos -->
-    <script src="script.js" defer></script> <!-- Archivo JavaScript cargado al final -->
+    <title>Enlaces Comerciales - Coinsumo</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Bienvenido a Coinsumo</h1>
+        <h1>Enlaces Comerciales</h1>
         <nav>
             <ul>
-                <li><a href="#quienes-somos">Quiénes Somos</a></li>
-                <li><a href="#registro">Registro</a></li>
-                <li><a href="#ventajas">Ventajas</a></li>
-                <li><a href="login.html">Iniciar Sesión</a></li> <!-- Enlace a Login -->
-                <li><a href="enlaces-comerciales.html">Enlaces Comerciales</a></li> <!-- Enlace a la nueva página -->
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="registro.html">Registro</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
                 <li><a href="https://coinsumo.co">Ir a Coinsumo</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section id="quienes-somos">
-            <h2>Quiénes Somos</h2>
-            <p>Descripción de Coinsumo y lo que ofrecemos...</p>
-        </section>
-
         <section id="registro">
             <h2>Registro para Afiliados</h2>
             <form id="registrationForm">
@@ -73,38 +65,14 @@
                 <button type="submit">Registrar</button>
             </form>
         </section>
-         
-            <section id="terms">
-                <h3>Términos y Condiciones</h3>
-                <p>Texto de los términos y condiciones...</p>
-            </section>
-        </section>
-
-        <section id="ventajas">
-            <h2>Ventajas de ser parte de Coinsumo</h2>
-            <ul>
-                <li>Gana puntos por recomendar y comprar.</li>
-                <li>Accede a productos exclusivos.</li>
-                <li>Utiliza nuestra billetera digital.</li>
-            </ul>
+                <!-- Añadir más tiendas según sea necesario -->
+            </div>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2024 Coinsumo. Todos los derechos reservados. | <a href="#contacto">Contáctanos</a></p>
     </footer>
-
-    <script>
-        function mostrarCasillaEmpresario() {
-            const tipoUsuario = document.getElementById('tipo_usuario').value;
-            const casillaEmpresario = document.getElementById('casillaEmpresario');
-            if (tipoUsuario === 'empresario') {
-                casillaEmpresario.style.display = 'block';
-            } else {
-                casillaEmpresario.style.display = 'none';
-            }
-        }
-    </script>
 </body>
 </html>
  
