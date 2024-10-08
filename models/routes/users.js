@@ -1,16 +1,17 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const userRouter = express.Router();
 const authMiddleware = require('../../middleware/authMiddleware');
-const User = require('../User'); // Importa el modelo User
-const Wallet = require('../Wallet'); // Importa el modelo Wallet
 const { getUser, findPosition } = require("../../middleware/userMiddleware");
+const User = require('../User');
+const Wallet = require('../Wallet');
 
 // Ruta para obtener todos los usuarios (solo para usuarios autenticados)
 userRouter.get("/", authMiddleware, async (req, res) => {
-  console.log("Ruta GET /users alcanzada"); // Verifica que la ruta se invoca
+  console.log("Ruta GET /users alcanzada");
   try {
-    const users = await User.find().populate("wallet"); // Población de billetera
+    const users = await User.find().populate("wallet");
     res.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -18,40 +19,78 @@ userRouter.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// Ruta para crear un nuevo usuario
+// Registro de Usuario
 userRouter.post('/registro', async (req, res) => {
-  try {
-      const { userId, name, email, whatsapp, pais, departamento, ciudad, direccion, tipo_usuario, porcentaje } = req.body;
+  const { userId, name, email, whatsapp, pais, departamento, ciudad, direccion, tipo_usuario, porcentaje, password } = req.body;
 
-      const newUser = new User({
-          idNumber: userId,
-          name,
-          email,
-          whatsapp,
-          pais,
-          departamento,
-          ciudad,
-          direccion,
-          entrepreneur: tipo_usuario === 'empresario', 
-          wholesale: tipo_usuario === 'mayorista',
-          percentage: porcentaje,
-      });
-
-      const salt = await bcrypt.genSalt(10);
-      newUser.password = await bcrypt.hash(req.body.password, salt); // Asegúrate de que tienes una contraseña en tu formulario.
-
-      await newUser.save(); // Guarda el nuevo usuario
-      res.status(201).json({ success: true, message: "Registro exitoso" });
-  } catch (error) {
-      console.error(error);
-      res.status(400).json({ success: false, message: error.message });
-  }
-});
   // Validaciones
-  if (!idNumber || !name || !email || !password) {
+  if (!userId || !name || !email || !password) {
     return res.status(400).json({ message: "Todos los campos son obligatorios" });
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Formato de correo electrónico inválido" });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ message: "La contraseña debe tener al menos 6 caracteres" });
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: "El correo electrónico ya está en uso" });
+
+    const newUser = new User({
+      idNumber: userId,
+      name,
+      email,
+      password,  // Se encriptará más tarde
+      whatsapp,
+      pais,
+      departamento,
+      ciudad,
+      direccion,
+      entrepreneur: tipo_usuario === 'empresario', 
+      wholesale: tipo_usuario === 'mayorista',
+      percentage: porcentaje
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    newUser.password = await bcrypt.hash(newUser.password, salt);
+
+    await newUser.save();
+
+    const newWallet = new Wallet({ userId: newUser._id });
+    await newWallet.save();
+
+    newUser.wallet = newWallet._id;
+    await newUser.save();
+
+    res.status(201).json({ message: "Registro exitoso" });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+// Inicio de Sesión
+userRouter.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).json({ message: 'Usuario no encontrado' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: 'Contraseña incorrecta' }); // Corrección aquí
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    res.json({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error de servidor' });
+  }
+});
+ 
   // Validar formato de correo electrónico
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {

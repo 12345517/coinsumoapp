@@ -1,4 +1,4 @@
- require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -7,14 +7,16 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const path = require('path');
 const authMiddleware = require('./middleware/authMiddleware');
+const adminMiddleware = require('./middleware/adminMiddleware'); // Asegúrate de crear este archivo
+
 
 console.log('Intentando cargar el modelo User');
 
-const User = require('./models/User'); // Verifica que la ruta sea correcta
+const User = require('./models/User'); 
 
 // Rutas de la API
 const userRouter = require('./models/routes/users');
-const afiliadosRouter = require('./models/routes/afiliados'); // Nuevamente, asegurarte que la ruta es correcta
+const afiliadosRouter = require('./models/routes/afiliados'); 
 const thirdPartyRouter = require('./models/routes/thirdParties');
 const walletRouter = require('./models/routes/wallet');
 const transactionRouter = require('./models/routes/transactions');
@@ -27,13 +29,14 @@ const entrepreneurRouter = require('./models/routes/entrepreneurs');
 const collaboratorRouter = require('./models/routes/collaborators');
 const crmRouter = require('./models/routes/crm');
 
-const app = express(); // Define la aplicación Express
-const PORT = process.env.PORT || 3001; // Cambia ":3000" a 3001
+const app = express(); 
+const PORT = process.env.PORT || 3001; 
 
 // Configuración de CORS
 app.use(cors({
     origin: [
-                'https://coinsumo.co', //cambio esto a dominio real
+                'https://coinsumo.co', 
+                'http://localhost:3001' // Agrega localhost para desarrollo
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
@@ -42,7 +45,23 @@ app.use(cors({
 app.use(express.json());
 app.use(helmet());
 
-// Conexión a la base de datos MongoDB
+
+// Rutas de la API
+app.use('/api/users', authMiddleware, userRouter);
+app.use('/api/afiliados', authMiddleware, afiliadosRouter); 
+app.use('/api/thirdParties', authMiddleware, thirdPartyRouter);
+app.use('/api/wallet', authMiddleware, walletRouter);
+app.use('/api/transactions', authMiddleware, transactionRouter);
+app.use('/api/points', authMiddleware, pointsRouter);
+app.use('/api/purchases', authMiddleware, purchasesRouter);
+app.use('/api/users/backoffice', authMiddleware, userBackOfficeRouter);
+app.use('/api/domiciliarios', authMiddleware, domiciliariosRouter);
+app.use('/api/wholesalers', wholesalerRouter); 
+app.use('/api/entrepreneurs', entrepreneurRouter); 
+app.use('/api/collaborators', authMiddleware, collaboratorRouter);
+app.use('/api/crm', authMiddleware, crmRouter);
+
+//Conexión a la base de datos MongoDB
 mongoose.connect(process.env.MONGO_URI, {})
     .then(() => console.log('Conectado a la base de datos'))
     .catch(err => console.error('Error al conectar a la base de datos:', err));
@@ -54,22 +73,15 @@ const apiLimiter = rateLimit({
     message: 'Demasiadas solicitudes. Intenta de nuevo más tarde.',
 });
 
-app.use('/api', apiLimiter); // Aplicar limitación a las rutas de la API
+app.use('/api', apiLimiter); 
 
-// Rutas de la API
-app.use('/users', authMiddleware, userRouter);
-app.use('/afiliados', authMiddleware, afiliadosRouter); // Añadir la ruta de afiliados
-app.use('/thirdParties', authMiddleware, thirdPartyRouter);
-app.use('/wallet', authMiddleware, walletRouter);
-app.use('/transactions', authMiddleware, transactionRouter);
-app.use('/points', authMiddleware, pointsRouter);
-app.use('/purchases', authMiddleware, purchasesRouter);
-app.use('/users/backoffice', authMiddleware, userBackOfficeRouter);
-app.use('/domiciliarios', authMiddleware, domiciliariosRouter);
-app.use('/wholesalers', wholesalerRouter); // Mayoristas no usan el middleware
-app.use('/entrepreneurs', entrepreneurRouter); // Empresarios no usan el middleware
-app.use('/collaborators', authMiddleware, collaboratorRouter);
-app.use('/crm', authMiddleware, crmRouter);
+//Ruta para admin
+app.get('/api/admin/users', authMiddleware, adminMiddleware, async (req, res) => {
+    // Lógica para listar usuarios
+    res.send('Usuarios');
+});
+
+
 app.listen(PORT, () => {
     console.log('Servidor corriendo en http://localhost:${PORT}');
-  });
+});

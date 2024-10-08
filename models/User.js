@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  isAdmin: { type: Boolean, default: false }, // Nuevo campo para admin
   whatsapp: { type: String },
   pais: { type: String, required: true }, // Nuevo campo para país
   departamento: { type: String, required: true }, // Nuevo campo para departamento
