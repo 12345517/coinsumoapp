@@ -14,6 +14,7 @@ const User = require('./models/User'); // Verifica que la ruta sea correcta
 
 // Rutas de la API
 const userRouter = require('./models/routes/users');
+const afiliadosRouter = require('./models/routes/afiliados'); // Nuevamente, asegurarte que la ruta es correcta
 const thirdPartyRouter = require('./models/routes/thirdParties');
 const walletRouter = require('./models/routes/wallet');
 const transactionRouter = require('./models/routes/transactions');
@@ -58,6 +59,7 @@ app.use('/api', apiLimiter); // Aplicar limitación a las rutas de la API
 
 // Rutas de la API
 app.use('/users', authMiddleware, userRouter);
+app.use('/afiliados', authMiddleware, afiliadosRouter); // Añadir la ruta de afiliados
 app.use('/thirdParties', authMiddleware, thirdPartyRouter);
 app.use('/wallet', authMiddleware, walletRouter);
 app.use('/transactions', authMiddleware, transactionRouter);
