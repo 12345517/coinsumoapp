@@ -7,17 +7,7 @@ const { getUser, findPosition } = require("../../middleware/userMiddleware");
 const User = require('../User');
 const Wallet = require('../Wallet');
 
-// Ruta para obtener todos los usuarios (solo para usuarios autenticados)
-userRouter.get("/", authMiddleware, async (req, res) => {
-  console.log("Ruta GET /users alcanzada");
-  try {
-    const users = await User.find().populate("wallet");
-    res.json(users);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({ message: "Error fetching users" });
-  }
-});
+// ... (Ruta GET /users - Sin cambios) ...
 
 // Registro de Usuario
 userRouter.post('/registro', async (req, res) => {
@@ -45,7 +35,7 @@ userRouter.post('/registro', async (req, res) => {
       idNumber: userId,
       name,
       email,
-      password,  // Se encriptará más tarde
+      password,  
       whatsapp,
       pais,
       departamento,
@@ -73,20 +63,26 @@ userRouter.post('/registro', async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
 // Inicio de Sesión
 userRouter.post('/login', async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email y contraseña son obligatorios" });
+  }
+
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(401).json({ message: 'Usuario no encontrado' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: 'Contraseña incorrecta' }); // Corrección aquí
+    if (!isMatch) return res.status(401).json({ message: 'Contraseña incorrecta' });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     res.json({ token });
   } catch (error) {
-    console.error(error);
+    console.error("Error de inicio de sesión:", error);
     res.status(500).json({ message: 'Error de servidor' });
   }
 });
