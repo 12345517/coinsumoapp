@@ -17,14 +17,14 @@ const BackofficeScreen = () => {
         }
 
         // Obtener referidos
-        const referralsResponse = await axios.get('http://tu-api.com/users/referrals', {
+        const referralsResponse = await axios.get('http://coinsumo.co/users/referrals', {
           headers: {
             Authorization: Bearer ({token})
           }
         });
 
         // Obtener transacciones
-        const transactionsResponse = await axios.get('http://tu-api.com/users/transactions', {
+        const transactionsResponse = await axios.get('http://coinsumo.co/users/transactions', {
           headers: {
             Authorization: Bearer ({token})
           }

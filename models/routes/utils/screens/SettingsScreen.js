@@ -17,7 +17,7 @@ const SettingsScreen = () => {
           return;
         }
 
-        const response = await axios.get('http://tu-api.com/entrepreneurs/commission', {
+        const response = await axios.get('http://coinsumo.co/entrepreneurs/commission', {
           headers: {
             Authorization: Bearer ({token})
           }
@@ -46,7 +46,7 @@ const SettingsScreen = () => {
         return;
       }
 
-      await axios.put('http://tu-api.com/entrepreneurs/updateCommission', 
+      await axios.put('http://coinsumo.co/entrepreneurs/updateCommission', 
         { commissionPercentage: parseFloat(commissionPercentage) }, 
         {
           headers: {

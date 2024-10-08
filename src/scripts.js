@@ -1,7 +1,26 @@
 // script.js
 
-document.addEventListener('DOMContentLoaded', () => {
-    const registrationForm = document.getElementById('registrationForm');
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('registrationForm');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(form);
+
+        fetch('https://coinsumo.co/api/registro', { // Cambia la URL al endpoint real
+            method: 'POST',
+            body: formData 
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Registro exitoso');
+            } else {
+                alert('Error en el registro');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+});
     
     registrationForm.addEventListener('submit', function(e) {
         e.preventDefault(); // Previene el comportamiento por defecto del formulario
@@ -20,4 +39,4 @@ document.addEventListener('DOMContentLoaded', () => {
         registrationForm.reset();
         alert('Registro completado correctamente');
     });
-});
+
