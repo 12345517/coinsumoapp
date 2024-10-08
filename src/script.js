@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(form);
+        //verificar que los datos del formulario se capturan correctamente 
+        console.log(...formdata);
 
         fetch('https://coinsumo.co/api/registro', { // Cambia la URL al endpoint real
             method: 'POST',
