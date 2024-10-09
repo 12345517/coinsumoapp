@@ -36,7 +36,8 @@ const PORT = process.env.PORT || 3001;
 app.use(cors({
     origin: [
                 'https://coinsumo.co', 
-                'http://localhost:3001' // Agrega localhost para desarrollo
+                'http://localhost:3001', // Agrega localhost para desarrollo
+                'https://www.coinsumo.co'
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
