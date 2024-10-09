@@ -1,44 +1,69 @@
  // script.js
 
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('registrationForm');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(form);
-        //verificar que los datos del formulario se capturan correctamente 
-        console.log(...formdata);
+ document.addEventListener('DOMContentLoaded', function() {
+    const registrationForm = document.getElementById('registrationForm');
 
-        fetch('https://coinsumo.co/api/registro', { // Cambia la URL al endpoint real
+    registrationForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(registrationForm);
+
+        fetch('https://coinsumo.co/api/registro', {
             method: 'POST',
-            body: formData 
+            body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Error en el registro');
+                });
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 alert('Registro exitoso');
+                const userId = data.userId; 
+                getAffiliates(userId);
             } else {
-                alert('Error en el registro');
+                alert('Error en el registro: ' + data.message);
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error en el registro: ' + error.message);
+        });
     });
+
+    function getAffiliates(userId) {
+        fetch('/api/afiliados?userId=${userId}', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Agregar token de autenticación si es necesario
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Error al obtener afiliados');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.afiliados) {
+                console.log('Afiliados:', data.afiliados);
+                const afiliadosList = document.createElement('ul');
+                data.afiliados.forEach(afiliado => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = afiliado.name;
+                    afiliadosList.appendChild(listItem);
+                });
+                document.body.appendChild(afiliadosList);
+            } else {
+                console.error('No se encontraron afiliados.');
+            }
+        })
+        .catch(error => console.error('Error al obtener afiliados:', error));
+    }
 });
-    
-    registrationForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Previene el comportamiento por defecto del formulario
-
-        const userId = document.getElementById('userId').value;
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const whatsapp = document.getElementById('whatsapp').value; // Nueva línea
-        const tipoUsuario = document.getElementById('tipo_usuario').value;
-        const porcentaje = document.getElementById('porcentaje').value;
-
-        // Aquí puedes manejar el envío de datos al servidor o mostrar un mensaje
-        console.log('ID de Usuario: {userId}, Nombre: {name}, Email: {email}, WhatsApp: {whatsapp}, Tipo de Usuario: {tipoUsuario}, Porcentaje: {porcentaje}');
-
-        // Reinicia el formulario
-        registrationForm.reset();
-        alert('Registro completado correctamente');
-    });
-
