@@ -1,13 +1,12 @@
  // script.js
 
  document.addEventListener('DOMContentLoaded', function() {
-    const registrationForm = document.getElementById('registrationForm');
+    const form = document.getElementById('registrationForm');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(form);
 
-    registrationForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(registrationForm);
-
-        fetch('https://coinsumo.co/api/registro', {
+        fetch('https://coinsumo.co/api/registro', { // Reemplaza con tu URL de API
             method: 'POST',
             body: formData
         })
@@ -22,8 +21,8 @@
         .then(data => {
             if (data.success) {
                 alert('Registro exitoso');
-                const userId = data.userId; 
-                getAffiliates(userId);
+                // Aquí puedes redirigir a otra página o mostrar un mensaje de éxito
+                window.location.href = '/exito'; // Ejemplo: redirige a /exito
             } else {
                 alert('Error en el registro: ' + data.message);
             }
@@ -33,37 +32,4 @@
             alert('Error en el registro: ' + error.message);
         });
     });
-
-    function getAffiliates(userId) {
-        fetch('/api/afiliados?userId=${userId}', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                // Agregar token de autenticación si es necesario
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(errorData => {
-                    throw new Error(errorData.message || 'Error al obtener afiliados');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.afiliados) {
-                console.log('Afiliados:', data.afiliados);
-                const afiliadosList = document.createElement('ul');
-                data.afiliados.forEach(afiliado => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = afiliado.name;
-                    afiliadosList.appendChild(listItem);
-                });
-                document.body.appendChild(afiliadosList);
-            } else {
-                console.error('No se encontraron afiliados.');
-            }
-        })
-        .catch(error => console.error('Error al obtener afiliados:', error));
-    }
 });
