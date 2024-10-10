@@ -30,13 +30,13 @@ const collaboratorRouter = require('./models/routes/collaborators');
 const crmRouter = require('./models/routes/crm');
 
 const app = express(); 
-const PORT = process.env.PORT || 3001; 
+const PORT = process.env.PORT || 4000; // cambio a otro puerto temporalmente
 
 // Configuración de CORS
 app.use(cors({
     origin: [
                 'https://coinsumo.co', 
-                'http://localhost:3001', // Agrega localhost para desarrollo
+                'http://localhost:4000', // Agrega localhost para desarrollo
                 'https://www.coinsumo.co'
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
