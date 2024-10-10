@@ -30,6 +30,8 @@ const collaboratorRouter = require('./models/routes/collaborators');
 const crmRouter = require('./models/routes/crm');
 
 const app = express(); 
+// Usa la carpeta public para archivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
 const PORT = process.env.PORT || 4000; // cambio a otro puerto temporalmente
 
 // Configuración de CORS
@@ -83,6 +85,6 @@ app.get('/api/admin/users', authMiddleware, adminMiddleware, async (req, res) =>
 });
 
 
-app.listen(PORT, () => {
-    console.log('Servidor corriendo en http://localhost:${PORT}');
+app.listen(4000, () => {
+    console.log('Servidor corriendo en http://localhost:4000');
 });
